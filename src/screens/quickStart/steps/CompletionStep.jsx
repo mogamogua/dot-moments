@@ -147,7 +147,7 @@ export default function CompletionStep({
           onClick={onFinish}
           disabled={!completionRate}
         >
-          점 찍기 💧
+          점 찍기
         </button>
       </div>
     </div>

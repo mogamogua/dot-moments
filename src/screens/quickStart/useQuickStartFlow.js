@@ -46,14 +46,20 @@ export default function useQuickStartFlow(onDone) {
   }
 
   const recordDot = () => {
-    addDot({
+    const dotData = {
       milestoneId: selectedMilestone?.id,
       label: minAction,
       completionRate,
       ...(beforeAfterNote && { beforeAfterNote }),
       ...(encouragement  && { encouragement }),
       ...(photo          && { photo }),
-    })
+    }
+    try {
+      addDot(dotData)
+    } catch {
+      // 사진 때문에 localStorage 용량 초과 시 사진 없이 재시도
+      try { addDot({ ...dotData, photo: undefined }) } catch { /* 무시 */ }
+    }
     window.dispatchEvent(new Event('dots-updated'))
     setRevealed(true)
   }
