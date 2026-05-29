@@ -18,16 +18,45 @@
 
   --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
 
+  --spacing-screen-x: 24px;
+  --spacing-screen-top: 56px;
+  --spacing-screen-bottom: 40px;
+  --spacing-screen-bottom-nav: 56px;
+
   --animate-fade-in: fadeIn 0.3s ease both;
   --animate-fade-in-slow: fadeIn 0.5s ease both;
   --animate-slide-up: slideUp 0.5s ease both;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html,
+  body,
+  #root,
+  h1, h2, h3, p, ul, ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
 }
 
 :root {
@@ -84,6 +113,81 @@ body {
   overflow: hidden;
 }
 
+/* Canonical screen padding (DESIGN_SYSTEM: 56 / 24 / 40) */
+.screen-padding {
+  padding: var(--spacing-screen-top) var(--spacing-screen-x) var(--spacing-screen-bottom);
+}
+
+.screen-padding--nav {
+  padding-bottom: var(--spacing-screen-bottom-nav);
+}
+
+/* Flow step layout (Mode A/B overlays) */
+.flow-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  padding: var(--spacing-screen-top) var(--spacing-screen-x) var(--spacing-screen-bottom);
+}
+
+.flow-step {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  animation: fadeIn 0.3s ease both;
+}
+
+.flow-scroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flow-footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.flow-footer--row {
+  flex-direction: row;
+  gap: 10px;
+}
+
+.flow-footer--row .btn-secondary {
+  flex: 1;
+}
+
+.flow-footer--row .btn-main {
+  flex: 2;
+}
+
+.flow-title {
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+
+.flow-subtitle {
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -103,6 +207,12 @@ body {
 @keyframes ripple {
   from { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
   to   { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+/* Dot reveal ripples — scale only (parent handles centering) */
+@keyframes ripple-scale {
+  from { transform: scale(0.8); opacity: 0.5; }
+  to   { transform: scale(2.5); opacity: 0; }
 }
 
 @keyframes slideUp {
@@ -193,7 +303,21 @@ body {
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:hover  { box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
 
+/* Home mode-select cards — stacked layout */
+.btn-primary--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px 20px;
+}
+
+.btn-secondary--center {
+  display: inline-flex;
+  margin-top: 28px;
+}
+
 .input-area {
+  display: block;
   width: 100%;
   background: #ffffff;
   border: 1px solid var(--border-strong);
@@ -206,6 +330,11 @@ body {
   outline: none;
   transition: border-color 0.15s;
   min-height: 80px;
+  line-height: 1.5;
+}
+
+.input-area--compact {
+  min-height: 0;
 }
 .input-area:focus { border-color: #292524; border-width: 1.5px; }
 .input-area::placeholder { color: var(--text-dim); }

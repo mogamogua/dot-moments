@@ -1,7 +1,7 @@
 import MilestonePicker from '../../../components/flow/MilestonePicker'
 import SuggestionChips from '../../../components/flow/SuggestionChips'
 import { GOAL_SUGGESTIONS } from '../../../modeFlow'
-import { scrollBody, stepShell, stepSubtitle, stepTitle } from '../../../lib/flowClasses'
+import { scrollBody, stepFooter, stepShell, stepSubtitle, stepTitle } from '../../../lib/flowClasses'
 
 export default function GoalStep({
   goalText,
@@ -42,9 +42,11 @@ export default function GoalStep({
         />
       </div>
 
-      <button type="button" className="btn-main mt-4 shrink-0" onClick={onNext} disabled={!canProceed}>
-        다음
-      </button>
+      <div className={stepFooter}>
+        <button type="button" className="btn-main" onClick={onNext} disabled={!canProceed}>
+          다음
+        </button>
+      </div>
     </div>
   )
 }

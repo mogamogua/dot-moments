@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import GradientDot from '../components/GradientDot'
 import { loadData, getMilestoneById } from '../store'
+
 function groupByDate(dots) {
   const groups = {}
   ;[...dots].reverse().forEach(dot => {
@@ -37,7 +38,7 @@ export default function MyDots({ onSwipeRight }) {
 
   return (
     <div
-      className="screen px-6 pt-14"
+      className="screen screen-padding screen-padding--nav !pb-0"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={() => setTooltip(null)}
@@ -46,7 +47,7 @@ export default function MyDots({ onSwipeRight }) {
         <button
           type="button"
           onClick={onSwipeRight}
-          className="flex items-center border-0 bg-transparent pl-0 pr-1 text-xl leading-none text-body cursor-pointer"
+          className="flex items-center pl-0 pr-1 text-xl leading-none text-body"
           aria-label="홈으로 돌아가기"
         >
           ←

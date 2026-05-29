@@ -1,6 +1,6 @@
 import { START_TEMPLATES } from '../../../modeFlow'
-import { radioIndicator, scrollBody, stepShell, stepSubtitle, stepTitle } from '../../../lib/flowClasses'
 import { cn } from '../../../lib/cn'
+import { radioIndicator, scrollBody, stepFooter, stepShell, stepSubtitle, stepTitle } from '../../../lib/flowClasses'
 
 export default function StartTemplateStep({ selectedTemplateId, onSelect, onNext, canProceed }) {
   return (
@@ -9,7 +9,7 @@ export default function StartTemplateStep({ selectedTemplateId, onSelect, onNext
         <p className={stepTitle}>
           오늘은 여기서부터<br />생각해볼까요?
         </p>
-        <p className={cn(stepSubtitle, 'mb-5')}>다음과 같은 목표를 세워봐요.</p>
+        <p className={cn(stepSubtitle, '!mb-5')}>다음과 같은 목표를 세워봐요.</p>
 
         <div className="flex flex-col gap-2.5 pb-2">
           {START_TEMPLATES.map(t => {
@@ -20,7 +20,7 @@ export default function StartTemplateStep({ selectedTemplateId, onSelect, onNext
                 type="button"
                 onClick={() => onSelect(t.id)}
                 className={cn(
-                  'flex w-full items-start gap-3 rounded-card border p-4 text-left font-inherit transition-all cursor-pointer',
+                  'flex w-full cursor-pointer items-start gap-3 rounded-card border p-4 text-left transition-all',
                   active ? 'border-accent bg-accent/10' : 'border-border bg-transparent',
                 )}
               >
@@ -35,9 +35,11 @@ export default function StartTemplateStep({ selectedTemplateId, onSelect, onNext
         </div>
       </div>
 
-      <button type="button" className="btn-main mt-4 shrink-0" onClick={onNext} disabled={!canProceed}>
-        다음
-      </button>
+      <div className={stepFooter}>
+        <button type="button" className="btn-main" onClick={onNext} disabled={!canProceed}>
+          다음
+        </button>
+      </div>
     </div>
   )
 }

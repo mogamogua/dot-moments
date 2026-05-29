@@ -12,7 +12,7 @@ export function TimerDisplay({ seconds, size = 'md' }) {
     <div
       className={cn(
         'mx-auto mb-6 flex items-center justify-center rounded-full bg-surface',
-        size === 'lg' ? 'size-[180px]' : 'size-40',
+        size === 'lg' ? 'h-[180px] w-[180px]' : 'h-40 w-40',
       )}
     >
       <span
@@ -54,16 +54,16 @@ export default function Timer({ durationMinutes, label, onComplete, onAbandon })
   if (timeLeft <= 0) return null
 
   return (
-    <div className="flex flex-1 animate-[fadeIn_0.3s_ease_both] flex-col items-center justify-center">
-      <TimerDisplay seconds={timeLeft} size="lg" />
-      <p className="px-4 text-center text-[15px] leading-relaxed text-body">{label}</p>
-      <button
-        type="button"
-        className="btn-ghost absolute bottom-10 left-6 right-6"
-        onClick={handleAbandon}
-      >
-        포기하기
-      </button>
+    <div className="flow-step relative">
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <TimerDisplay seconds={timeLeft} size="lg" />
+        <p className="px-4 text-center text-[15px] leading-relaxed text-body">{label}</p>
+      </div>
+      <div className="flow-footer">
+        <button type="button" className="btn-ghost" onClick={handleAbandon}>
+          포기하기
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { TimerDisplay } from '../../../components/Timer'
-import { scrollBody, stepShell, stepSubtitle, stepTitle, timerOption } from '../../../lib/flowClasses'
+import { cn } from '../../../lib/cn'
+import { scrollBody, stepFooter, stepShell, stepSubtitle, stepTitle, timerOption } from '../../../lib/flowClasses'
 
 const TIMER_OPTIONS = [
   { label: '10분', value: 10 },
@@ -24,15 +25,15 @@ export default function ActionPlanStep({
         <p className={stepTitle}>
           {template.step3Title || '선택한 시작점에서 어떤 것을 할까요?'}
         </p>
-        <p className={`${stepSubtitle} mb-5`}>오늘 할 일을 가볍게 적어봐요.</p>
+        <p className={cn(stepSubtitle, '!mb-5')}>오늘 할 일을 가볍게 적어봐요.</p>
 
         <div className="card mb-4">
           <div className="flex items-start gap-2.5">
             <span className="mt-1.5 size-2.5 shrink-0 rounded-full bg-accent" />
-            <div className="flex-1">
+            <div className="min-w-0 flex-1">
               <p className="mb-2.5 text-[15px] font-semibold text-ink">{template.title}</p>
               <textarea
-                className="input-area m-0 resize-none bg-bg"
+                className="input-area input-area--compact resize-none"
                 value={minAction}
                 onChange={e => onMinActionChange(e.target.value)}
                 rows={3}
@@ -58,7 +59,7 @@ export default function ActionPlanStep({
         <TimerDisplay seconds={timerMinutes * 60} size="md" />
       </div>
 
-      <div className="flex shrink-0 flex-col gap-2.5">
+      <div className={stepFooter}>
         <button type="button" className="btn-main" onClick={onStart} disabled={!minAction.trim()}>
           시작
         </button>

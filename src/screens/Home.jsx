@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import GradientDot from '../components/GradientDot'
 import { loadData, getTodayDots, getMilestoneById } from '../store'
+
 export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
   const [data, setData] = useState(() => loadData())
   const [today, setToday] = useState('')
@@ -31,7 +32,7 @@ export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
 
   return (
     <div
-      className="screen flex justify-between px-6 pb-10 pt-14"
+      className="screen screen-padding screen-padding--nav flex justify-between"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -58,7 +59,7 @@ export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
             </div>
             <p className="mb-2 text-xl font-light tracking-tight text-ink">오늘 점을 찍었어요.</p>
             <p className="text-sm text-body">{todayDots.length}개의 기록이 남겨졌어요</p>
-            <button type="button" className="btn-secondary mt-7 text-sm" onClick={onQuickStart}>
+            <button type="button" className="btn-secondary btn-secondary--center text-sm" onClick={onQuickStart}>
               하나 더 찍을까요?
             </button>
           </div>
@@ -67,23 +68,15 @@ export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
             <p className="mb-2 text-[clamp(20px,6vw,26px)] font-light leading-snug tracking-tight text-ink">
               오늘 어때요?
             </p>
-            <button
-              type="button"
-              className="btn-primary flex-col items-start gap-1.5 px-5 py-[18px]"
-              onClick={onQuickStart}
-            >
+            <button type="button" className="btn-primary btn-primary--stacked" onClick={onQuickStart}>
               <span className="text-[22px]">🌧</span>
-              <div className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">시작하기 어려워요</div>
-              <div className="text-[clamp(11px,3vw,12px)] text-body">장벽을 같이 없애볼게요</div>
+              <span className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">시작하기 어려워요</span>
+              <span className="text-[clamp(11px,3vw,12px)] text-body">장벽을 같이 없애볼게요</span>
             </button>
-            <button
-              type="button"
-              className="btn-primary flex-col items-start gap-1.5 px-5 py-[18px]"
-              onClick={onStepByStep}
-            >
+            <button type="button" className="btn-primary btn-primary--stacked" onClick={onStepByStep}>
               <span className="text-[22px]">🌤</span>
-              <div className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">해볼 수 있을 것 같아요</div>
-              <div className="text-[clamp(11px,3vw,12px)] text-body">실행하고 기록해요</div>
+              <span className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">해볼 수 있을 것 같아요</span>
+              <span className="text-[clamp(11px,3vw,12px)] text-body">실행하고 기록해요</span>
             </button>
           </>
         )}
