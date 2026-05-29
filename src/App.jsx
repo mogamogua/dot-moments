@@ -62,15 +62,20 @@ export default function App() {
       {/* Bottom nav dots */}
       <div style={{
         position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', gap: 6, zIndex: 10, pointerEvents: 'none',
+        display: 'flex', gap: 6, zIndex: 10,
       }}>
         {[VIEWS.HOME, VIEWS.MY_DOTS].map(v => (
-          <div key={v} style={{
-            width: v === view ? 18 : 6, height: 6,
-            borderRadius: 3,
-            background: v === view ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.15)',
-            transition: 'all 0.3s',
-          }} />
+          <div
+            key={v}
+            onClick={() => switchTo(v)}
+            style={{
+              width: v === view ? 18 : 6, height: 6,
+              borderRadius: 3,
+              background: v === view ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.15)',
+              transition: 'all 0.3s',
+              cursor: v === view ? 'default' : 'pointer',
+            }}
+          />
         ))}
       </div>
 

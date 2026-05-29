@@ -104,8 +104,10 @@ export default function Home({ onModeA, onModeB, onSwipeLeft }) {
             })}
           </div>
         </div>
-        <p style={{ fontSize: 'clamp(10px, 3vw, 12px)', color: 'var(--text-dim)', textAlign: 'center', marginTop: 8, animation: 'swipeHint 2s ease-in-out infinite', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-          ← 스와이프하면 내 점들을 볼 수 있어요
+        <p
+          onClick={onSwipeLeft}
+          style={{ fontSize: 'clamp(10px, 3vw, 12px)', color: 'var(--text-dim)', textAlign: 'center', marginTop: 8, animation: 'swipeHint 2s ease-in-out infinite', whiteSpace: 'nowrap', overflow: 'hidden', cursor: 'pointer' }}>
+          ← 내 점들 보기
         </p>
       </div>
     </div>

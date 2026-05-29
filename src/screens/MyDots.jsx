@@ -44,7 +44,14 @@ export default function MyDots({ onSwipeRight }) {
       onTouchEnd={handleTouchEnd}
       onClick={() => setTooltip(null)}
     >
-      <p style={{ fontSize: 22, fontWeight: 300, marginBottom: 28, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>나의 점들</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+        <button
+          onClick={onSwipeRight}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 20, padding: '0 4px 0 0', lineHeight: 1, display: 'flex', alignItems: 'center' }}
+          aria-label="홈으로 돌아가기"
+        >←</button>
+        <p style={{ fontSize: 22, fontWeight: 300, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>나의 점들</p>
+      </div>
 
       <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
         {groups.length === 0 ? (
