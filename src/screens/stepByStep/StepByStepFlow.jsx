@@ -6,8 +6,9 @@ import useStepByStepFlow from './useStepByStepFlow'
 import GoalStep from './steps/GoalStep'
 import StartTemplateStep from '../quickStart/steps/StartTemplateStep'
 import ActionPlanStep from '../quickStart/steps/ActionPlanStep'
+import CompletionStep from '../quickStart/steps/CompletionStep'
 
-/** "해볼 수 있을 것 같아요" — 오늘의 할 일 → 시작 전략 선택 → 행동 계획 → 타이머 */
+/** "해볼 수 있을 것 같아요" — 오늘의 할 일 → 시작 전략 선택 → 행동 계획 → (타이머) → 완료 인증 */
 export default function StepByStepFlow({ onClose, onDone }) {
   const flow = useStepByStepFlow(onDone)
 
@@ -24,15 +25,11 @@ export default function StepByStepFlow({ onClose, onDone }) {
     )
   }
 
-  const totalSteps = flow.timerEnabled ? 4 : 3
+  const totalSteps = flow.timerEnabled ? 5 : 4
+  const onBack = (flow.step > 1 && flow.step < 4) ? flow.goBack : undefined
 
   return (
-    <ModeShell
-      step={flow.step}
-      totalSteps={totalSteps}
-      onClose={onClose}
-      onBack={flow.step > 1 && flow.step < 4 ? flow.goBack : undefined}
-    >
+    <ModeShell step={flow.step} totalSteps={totalSteps} onClose={onClose} onBack={onBack}>
       {flow.step === 1 && (
         <GoalStep
           goalText={flow.goalText}
@@ -69,12 +66,26 @@ export default function StepByStepFlow({ onClose, onDone }) {
         />
       )}
 
-      {flow.step === 4 && (
+      {flow.step === 4 && flow.timerEnabled && (
         <Timer
           durationMinutes={flow.timerMinutes}
           label={flow.minAction}
-          onComplete={flow.recordDot}
+          onComplete={flow.goToCompletion}
           onAbandon={onDone}
+        />
+      )}
+
+      {flow.step === flow.completionStepNum && (
+        <CompletionStep
+          completionRate={flow.completionRate}
+          onCompletionChange={flow.setCompletionRate}
+          beforeAfterNote={flow.beforeAfterNote}
+          onBeforeAfterChange={flow.setBeforeAfterNote}
+          encouragement={flow.encouragement}
+          onEncouragementChange={flow.setEncouragement}
+          photo={flow.photo}
+          onPhotoChange={flow.setPhoto}
+          onFinish={flow.recordDot}
         />
       )}
     </ModeShell>

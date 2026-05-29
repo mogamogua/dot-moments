@@ -6,8 +6,9 @@ import useQuickStartFlow from './useQuickStartFlow'
 import BlockerStep from './steps/BlockerStep'
 import StartTemplateStep from './steps/StartTemplateStep'
 import ActionPlanStep from './steps/ActionPlanStep'
+import CompletionStep from './steps/CompletionStep'
 
-/** "시작하기 어려워요" — 장벽 파악 → 시작 전략 → 타이머로 최소 행동 */
+/** "시작하기 어려워요" — 장벽 파악 → 시작 전략 → 행동 계획 → (타이머) → 완료 인증 */
 export default function QuickStartFlow({ onClose, onDone }) {
   const flow = useQuickStartFlow(onDone)
 
@@ -24,15 +25,13 @@ export default function QuickStartFlow({ onClose, onDone }) {
     )
   }
 
-  const totalSteps = flow.timerEnabled ? 4 : 3
+  // 타이머 사용 시: 1~3 + timer(4) + completion(5) = 5단계
+  // 타이머 없을 시: 1~3 + completion(4) = 4단계
+  const totalSteps = flow.timerEnabled ? 5 : 4
+  const onBack = (flow.step > 1 && flow.step < 4) ? flow.goBack : undefined
 
   return (
-    <ModeShell
-      step={flow.step}
-      totalSteps={totalSteps}
-      onClose={onClose}
-      onBack={flow.step > 1 && flow.step < 4 ? flow.goBack : undefined}
-    >
+    <ModeShell step={flow.step} totalSteps={totalSteps} onClose={onClose} onBack={onBack}>
       {flow.step === 1 && (
         <BlockerStep
           blockerText={flow.blockerText}
@@ -69,12 +68,26 @@ export default function QuickStartFlow({ onClose, onDone }) {
         />
       )}
 
-      {flow.step === 4 && (
+      {flow.step === 4 && flow.timerEnabled && (
         <Timer
           durationMinutes={flow.timerMinutes}
           label={flow.minAction}
-          onComplete={flow.recordDot}
+          onComplete={flow.goToCompletion}
           onAbandon={onDone}
+        />
+      )}
+
+      {flow.step === flow.completionStepNum && (
+        <CompletionStep
+          completionRate={flow.completionRate}
+          onCompletionChange={flow.setCompletionRate}
+          beforeAfterNote={flow.beforeAfterNote}
+          onBeforeAfterChange={flow.setBeforeAfterNote}
+          encouragement={flow.encouragement}
+          onEncouragementChange={flow.setEncouragement}
+          photo={flow.photo}
+          onPhotoChange={flow.setPhoto}
+          onFinish={flow.recordDot}
         />
       )}
     </ModeShell>
