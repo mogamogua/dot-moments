@@ -1,15 +1,15 @@
 import DotReveal from '../../components/DotReveal'
 import MilestoneSetup from '../../components/MilestoneSetup'
 import ModeShell from '../../components/flow/ModeShell'
+import Timer from '../../components/Timer'
 import useStepByStepFlow from './useStepByStepFlow'
 import GoalStep from './steps/GoalStep'
-import StepsPlanStep from './steps/StepsPlanStep'
-import StepsExecuteStep from './steps/StepsExecuteStep'
-import ReflectionStep from './steps/ReflectionStep'
+import StartTemplateStep from '../quickStart/steps/StartTemplateStep'
+import ActionPlanStep from '../quickStart/steps/ActionPlanStep'
 
-/** "해볼 수 있을 것 같아요" — 목표 → 단계 나누기 → 실행 → 회고 */
+/** "해볼 수 있을 것 같아요" — 오늘의 할 일 → 시작 전략 선택 → 행동 계획 → 타이머 */
 export default function StepByStepFlow({ onClose, onDone }) {
-  const flow = useStepByStepFlow()
+  const flow = useStepByStepFlow(onDone)
 
   if (flow.revealed) {
     return <DotReveal milestone={flow.selectedMilestone || flow.milestones[0]} onDone={onDone} />
@@ -24,10 +24,6 @@ export default function StepByStepFlow({ onClose, onDone }) {
     )
   }
 
-  const handleStepChange = (index, value) => {
-    flow.setSteps(prev => prev.map((x, j) => (j === index ? value : x)))
-  }
-
   return (
     <ModeShell step={flow.step} onClose={onClose}>
       {flow.step === 1 && (
@@ -38,37 +34,38 @@ export default function StepByStepFlow({ onClose, onDone }) {
           selectedMilestone={flow.selectedMilestone}
           onSelectMilestone={flow.setSelectedMilestone}
           onSetup={() => flow.setShowSetup(true)}
-          onNext={flow.goToPlanStep}
+          onNext={flow.goToTemplateStep}
           canProceed={!!flow.goalText.trim() && !!flow.selectedMilestone}
         />
       )}
 
       {flow.step === 2 && (
-        <StepsPlanStep
-          steps={flow.steps}
-          editingSteps={flow.editingSteps}
-          onToggleEdit={() => flow.setEditingSteps(!flow.editingSteps)}
-          onStepChange={handleStepChange}
-          onNext={flow.goToExecuteStep}
+        <StartTemplateStep
+          selectedTemplateId={flow.selectedTemplateId}
+          onSelect={flow.setSelectedTemplateId}
+          onNext={flow.goToActionPlanStep}
+          canProceed={!!flow.selectedTemplateId}
         />
       )}
 
       {flow.step === 3 && (
-        <StepsExecuteStep
-          steps={flow.steps}
-          currentStep={flow.currentStep}
-          onAdvance={flow.advanceStep}
-          onStopEarly={flow.stopEarly}
+        <ActionPlanStep
+          template={flow.selectedTemplate}
+          minAction={flow.minAction}
+          onMinActionChange={flow.setMinAction}
+          timerMinutes={flow.timerMinutes}
+          onTimerChange={flow.setTimerMinutes}
+          onStart={flow.startCountdown}
+          onRestDay={flow.restDay}
         />
       )}
 
       {flow.step === 4 && (
-        <ReflectionStep
-          reflection={flow.reflection}
-          onReflectionChange={flow.setReflection}
-          note={flow.note}
-          onNoteChange={flow.setNote}
-          onFinish={flow.recordDot}
+        <Timer
+          durationMinutes={flow.timerMinutes}
+          label={flow.minAction}
+          onComplete={flow.recordDot}
+          onAbandon={onDone}
         />
       )}
     </ModeShell>

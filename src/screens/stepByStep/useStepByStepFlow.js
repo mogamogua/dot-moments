@@ -1,49 +1,36 @@
 import { useState } from 'react'
 import { addDot, loadData } from '../../store'
-import { suggestSteps } from '../../lib/suggestSteps'
+import { START_TEMPLATES, buildMinAction } from '../../modeFlow'
 
-export default function useStepByStepFlow() {
+export default function useStepByStepFlow(onDone) {
   const [milestones, setMilestones] = useState(() => loadData().milestones)
   const [showSetup, setShowSetup] = useState(false)
   const [step, setStep] = useState(1)
   const [goalText, setGoalText] = useState('')
   const [selectedMilestone, setSelectedMilestone] = useState(null)
-  const [steps, setSteps] = useState([])
-  const [editingSteps, setEditingSteps] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState(0)
-  const [reflection, setReflection] = useState('')
-  const [note, setNote] = useState('')
+  const [selectedTemplateId, setSelectedTemplateId] = useState(null)
+  const [minAction, setMinAction] = useState('')
+  const [timerMinutes, setTimerMinutes] = useState(10)
   const [revealed, setRevealed] = useState(false)
+
+  const selectedTemplate = START_TEMPLATES.find(t => t.id === selectedTemplateId)
 
   const refreshMilestones = () => setMilestones(loadData().milestones)
 
-  const goToPlanStep = () => {
-    setSteps(suggestSteps(goalText.trim()))
-    setStep(2)
+  const goToTemplateStep = () => setStep(2)
+
+  const goToActionPlanStep = () => {
+    const template = START_TEMPLATES.find(t => t.id === selectedTemplateId)
+    if (!template) return
+    setMinAction(buildMinAction(template, goalText, selectedMilestone?.name))
+    setTimerMinutes(template.defaultTimer ?? 10)
+    setStep(3)
   }
 
-  const goToExecuteStep = () => setStep(3)
-
-  const advanceStep = () => {
-    const next = currentStep + 1
-    setCompletedSteps(next)
-    if (next >= steps.length) setStep(4)
-    else setCurrentStep(next)
-  }
-
-  const stopEarly = () => {
-    setCompletedSteps(currentStep + 1)
-    setStep(4)
-  }
+  const startCountdown = () => setStep(4)
 
   const recordDot = () => {
-    const label = goalText.trim() + (
-      completedSteps < steps.length
-        ? ` · ${steps.length}단계 중 ${completedSteps}단계까지`
-        : ''
-    )
-    addDot({ milestoneId: selectedMilestone?.id, label, note, reflection })
+    addDot({ milestoneId: selectedMilestone?.id, label: minAction })
     window.dispatchEvent(new Event('dots-updated'))
     setRevealed(true)
   }
@@ -58,21 +45,18 @@ export default function useStepByStepFlow() {
     setGoalText,
     selectedMilestone,
     setSelectedMilestone,
-    steps,
-    setSteps,
-    editingSteps,
-    setEditingSteps,
-    currentStep,
-    completedSteps,
-    reflection,
-    setReflection,
-    note,
-    setNote,
+    selectedTemplateId,
+    setSelectedTemplateId,
+    selectedTemplate,
+    minAction,
+    setMinAction,
+    timerMinutes,
+    setTimerMinutes,
     revealed,
-    goToPlanStep,
-    goToExecuteStep,
-    advanceStep,
-    stopEarly,
+    goToTemplateStep,
+    goToActionPlanStep,
+    startCountdown,
     recordDot,
+    restDay: onDone,
   }
 }
