@@ -59,7 +59,7 @@ export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
             </div>
             <p className="mb-2 text-xl font-light tracking-tight text-ink">오늘 점을 찍었어요.</p>
             <p className="text-sm text-body">{todayDots.length}개의 기록이 남겨졌어요</p>
-            <button type="button" className="btn-secondary btn-secondary--center text-sm" onClick={onQuickStart}>
+            <button type="button" className="btn-secondary btn-secondary--center text-sm" onClick={onStepByStep}>
               하나 더 찍을까요?
             </button>
           </div>
