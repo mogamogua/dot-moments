@@ -77,9 +77,9 @@ body {
 }
 
 @keyframes dotAppear {
-  0%   { opacity: 0; transform: scale(0) translate(-50%, -50%); filter: blur(30px); }
-  60%  { opacity: 1; transform: scale(1.15) translate(-50%, -50%); filter: blur(0px); }
-  100% { opacity: 1; transform: scale(1) translate(-50%, -50%); filter: blur(0px); }
+  0%   { opacity: 0; transform: scale(0); filter: blur(30px); }
+  60%  { opacity: 1; transform: scale(1.15); filter: blur(0px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0px); }
 }
 
 @keyframes dotPulse {
