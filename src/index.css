@@ -1,4 +1,27 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f5f5f5;
+  --color-card: #ffffff;
+  --color-surface: #f0efed;
+  --color-ink: #0c0a09;
+  --color-body: #4e4e4e;
+  --color-dim: #a8a29e;
+  --color-border: #e7e5e4;
+  --color-border-strong: #d6d3d1;
+  --color-accent: #292524;
+
+  --radius-card: 16px;
+  --radius-chip: 12px;
+  --radius-pill: 9999px;
+
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+
+  --animate-fade-in: fadeIn 0.3s ease both;
+  --animate-fade-in-slow: fadeIn 0.5s ease both;
+  --animate-slide-up: slideUp 0.5s ease both;
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -8,25 +31,16 @@
 }
 
 :root {
-  /* Canvas */
   --bg: #f5f5f5;
   --bg-card: #ffffff;
   --bg-card2: #ffffff;
   --surface-strong: #f0efed;
-
-  /* Text */
   --text-primary: #0c0a09;
   --text-secondary: #4e4e4e;
   --text-dim: #a8a29e;
-
-  /* Borders */
   --border: #e7e5e4;
   --border-strong: #d6d3d1;
-
-  /* Shadow */
   --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04);
-
-  /* Radius */
   --radius: 16px;
   --radius-pill: 9999px;
 }
@@ -40,7 +54,7 @@ html, body, #root {
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -70,7 +84,6 @@ body {
   overflow: hidden;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -105,9 +118,6 @@ body {
 .animate-fade { animation: fadeIn 0.4s ease both; }
 .animate-slide-up { animation: slideUp 0.4s ease both; }
 
-/* ── Buttons ─────────────────────────────── */
-
-/* Primary — ink pill */
 .btn-main {
   width: 100%;
   height: 48px;
@@ -134,7 +144,6 @@ body {
   transform: none;
 }
 
-/* Secondary — outline pill */
 .btn-secondary {
   background: #ffffff;
   border: 1px solid var(--border-strong);
@@ -149,7 +158,6 @@ body {
 }
 .btn-secondary:hover { background: var(--surface-strong); }
 
-/* Ghost — text only */
 .btn-ghost {
   background: none;
   border: none;
@@ -164,7 +172,6 @@ body {
 }
 .btn-ghost:hover { color: var(--text-primary); }
 
-/* Primary-card — white card button (mode select) */
 .btn-primary {
   width: 100%;
   padding: 16px 20px;
@@ -186,7 +193,6 @@ body {
 .btn-primary:active { transform: scale(0.98); }
 .btn-primary:hover  { box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
 
-/* ── Input ───────────────────────────────── */
 .input-area {
   width: 100%;
   background: #ffffff;
@@ -204,7 +210,6 @@ body {
 .input-area:focus { border-color: #292524; border-width: 1.5px; }
 .input-area::placeholder { color: var(--text-dim); }
 
-/* ── Card ────────────────────────────────── */
 .card {
   background: #ffffff;
   border: 1px solid var(--border);
@@ -213,7 +218,6 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-/* ── Step dots ───────────────────────────── */
 .step-dots {
   display: flex;
   gap: 6px;
@@ -231,4 +235,51 @@ body {
 .step-dot.active {
   width: 20px;
   background: #292524;
+}
+
+/* Shared form controls */
+.input-inline {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 13px 16px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.input-inline:focus { border-color: #292524; }
+
+.btn-add {
+  border: none;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 20px;
+  width: 48px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn-add:disabled {
+  background: var(--surface-strong);
+  color: var(--text-dim);
+  cursor: default;
+}
+.btn-add:not(:disabled) {
+  background: #292524;
+  color: #ffffff;
+}
+
+.milestone-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  animation: fadeIn 0.3s ease both;
+  box-shadow: var(--shadow-card);
 }

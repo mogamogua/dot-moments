@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import GradientDot from '../components/GradientDot'
 import { loadData, getTodayDots, getMilestoneById } from '../store'
-
-export default function Home({ onModeA, onModeB, onSwipeLeft }) {
+export default function Home({ onQuickStart, onStepByStep, onSwipeLeft }) {
   const [data, setData] = useState(() => loadData())
   const [today, setToday] = useState('')
   const [touchStart, setTouchStart] = useState(null)
@@ -32,21 +31,18 @@ export default function Home({ onModeA, onModeB, onSwipeLeft }) {
 
   return (
     <div
-      className="screen"
-      style={{ padding: '56px 24px 40px', justifyContent: 'space-between' }}
+      className="screen flex justify-between px-6 pb-10 pt-14"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Header */}
       <div>
-        <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{today}</span>
+        <span className="text-[13px] text-body">{today}</span>
       </div>
 
-      {/* Check-in */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16 }}>
+      <div className="flex flex-1 flex-col justify-center gap-4">
         {hasTodayDot ? (
-          <div style={{ textAlign: 'center', animation: 'fadeIn 0.5s ease both' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
+          <div className="animate-[fadeIn_0.5s_ease_both] text-center">
+            <div className="mb-6 flex justify-center">
               {(() => {
                 const lastDot = todayDots[todayDots.length - 1]
                 const ms = getMilestoneById(data.milestones, lastDot.milestoneId)
@@ -55,49 +51,52 @@ export default function Home({ onModeA, onModeB, onSwipeLeft }) {
                     colorKey={ms.colorKey}
                     size={72}
                     glow
-                    style={{ animation: 'dotAppear 0.7s cubic-bezier(0.34,1.56,0.64,1) both' }}
+                    className="animate-[dotAppear_0.7s_cubic-bezier(0.34,1.56,0.64,1)_both]"
                   />
                 )
               })()}
             </div>
-            <p style={{ fontSize: 20, fontWeight: 300, color: 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.2px' }}>
-              오늘 점을 찍었어요.
-            </p>
-            <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>
-              {todayDots.length}개의 기록이 남겨졌어요
-            </p>
-            <button className="btn-secondary" style={{ marginTop: 28, fontSize: 14 }} onClick={onModeA}>
+            <p className="mb-2 text-xl font-light tracking-tight text-ink">오늘 점을 찍었어요.</p>
+            <p className="text-sm text-body">{todayDots.length}개의 기록이 남겨졌어요</p>
+            <button type="button" className="btn-secondary mt-7 text-sm" onClick={onQuickStart}>
               하나 더 찍을까요?
             </button>
           </div>
         ) : (
           <>
-            <p style={{ fontSize: 'clamp(20px, 6vw, 26px)', fontWeight: 300, color: 'var(--text-primary)', marginBottom: 8, lineHeight: 1.4, letterSpacing: '-0.3px' }}>
+            <p className="mb-2 text-[clamp(20px,6vw,26px)] font-light leading-snug tracking-tight text-ink">
               오늘 어때요?
             </p>
-            <button className="btn-primary" onClick={onModeA} style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '18px 20px', gap: 6 }}>
-              <span style={{ fontSize: 22 }}>🌧</span>
-              <div style={{ fontWeight: 600, fontSize: 'clamp(14px, 4vw, 16px)', lineHeight: 1.3 }}>시작하기 어려워요</div>
-              <div style={{ fontSize: 'clamp(11px, 3vw, 12px)', color: 'var(--text-secondary)' }}>장벽을 같이 없애볼게요</div>
+            <button
+              type="button"
+              className="btn-primary flex-col items-start gap-1.5 px-5 py-[18px]"
+              onClick={onQuickStart}
+            >
+              <span className="text-[22px]">🌧</span>
+              <div className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">시작하기 어려워요</div>
+              <div className="text-[clamp(11px,3vw,12px)] text-body">장벽을 같이 없애볼게요</div>
             </button>
-            <button className="btn-primary" onClick={onModeB} style={{ flexDirection: 'column', alignItems: 'flex-start', padding: '18px 20px', gap: 6 }}>
-              <span style={{ fontSize: 22 }}>🌤</span>
-              <div style={{ fontWeight: 600, fontSize: 'clamp(14px, 4vw, 16px)', lineHeight: 1.3 }}>해볼 수 있을 것 같아요</div>
-              <div style={{ fontSize: 'clamp(11px, 3vw, 12px)', color: 'var(--text-secondary)' }}>실행하고 기록해요</div>
+            <button
+              type="button"
+              className="btn-primary flex-col items-start gap-1.5 px-5 py-[18px]"
+              onClick={onStepByStep}
+            >
+              <span className="text-[22px]">🌤</span>
+              <div className="text-[clamp(14px,4vw,16px)] font-semibold leading-snug">해볼 수 있을 것 같아요</div>
+              <div className="text-[clamp(11px,3vw,12px)] text-body">실행하고 기록해요</div>
             </button>
           </>
         )}
       </div>
 
-      {/* Bottom stats */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0', borderTop: '1px solid var(--border)' }}>
-          <p style={{ fontSize: 'clamp(11px, 3.5vw, 13px)', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
+        <div className="flex items-center gap-3 border-t border-border py-4">
+          <p className="whitespace-nowrap text-[clamp(11px,3.5vw,13px)] text-body">
             지금까지{' '}
-            <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{data.dots.length}개</span>
+            <span className="font-semibold text-ink">{data.dots.length}개</span>
             의 점을 찍었어요.
           </p>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+          <div className="ml-auto flex gap-1.5">
             {recentDots.slice(0, 4).map((d, i) => {
               const ms = getMilestoneById(data.milestones, d.milestoneId)
               return <GradientDot key={i} colorKey={ms.colorKey} size={12} opacity={1 - i * 0.15} />
@@ -105,8 +104,12 @@ export default function Home({ onModeA, onModeB, onSwipeLeft }) {
           </div>
         </div>
         <p
+          role="button"
+          tabIndex={0}
           onClick={onSwipeLeft}
-          style={{ fontSize: 'clamp(10px, 3vw, 12px)', color: 'var(--text-dim)', textAlign: 'center', marginTop: 8, animation: 'swipeHint 2s ease-in-out infinite', whiteSpace: 'nowrap', overflow: 'hidden', cursor: 'pointer' }}>
+          onKeyDown={e => e.key === 'Enter' && onSwipeLeft()}
+          className="mt-2 cursor-pointer overflow-hidden whitespace-nowrap text-center text-[clamp(10px,3vw,12px)] text-dim animate-[swipeHint_2s_ease-in-out_infinite]"
+        >
           ← 내 점들 보기
         </p>
       </div>

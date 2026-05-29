@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GradientDot from '../components/GradientDot'
 import { DOT_COLORS } from '../store'
+import { cn } from '../lib/cn'
 
 const INFO_SLIDES = [
   {
@@ -49,139 +50,114 @@ export default function Onboarding({ onDone }) {
 
   const handleKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); addMilestone() } }
 
+  const canAdd = input.trim() && milestones.length < 5
+
   if (!isMilestoneSlide) {
     const slide = INFO_SLIDES[idx]
     return (
-      <div className="screen" style={{ justifyContent: 'space-between', padding: '80px 32px 56px' }}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div className="screen flex justify-between px-8 pb-14 pt-20">
+        <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             {slide.dots.map((d, i) => (
               <GradientDot
-                key={i} colorKey={d.colorKey} size={d.size} glow
-                style={{ animation: `dotAppear 0.6s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.12}s both` }}
+                key={i}
+                colorKey={d.colorKey}
+                size={d.size}
+                glow
+                className="animate-[dotAppear_0.6s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+                style={{ animationDelay: `${i * 0.12}s` }}
               />
             ))}
           </div>
         </div>
 
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <p style={{ fontSize: 22, fontWeight: 300, lineHeight: 1.5, color: 'var(--text-primary)', whiteSpace: 'pre-line', marginBottom: slide.sub ? 12 : 0, letterSpacing: '-0.2px' }}>
+        <div className="mb-12 text-center">
+          <p className={cn(
+            'whitespace-pre-line text-[22px] font-light leading-relaxed tracking-tight text-ink',
+            slide.sub ? 'mb-3' : 'mb-0',
+          )}>
             {slide.title}
           </p>
-          {slide.sub && <p style={{ fontSize: 16, color: 'var(--text-secondary)' }}>{slide.sub}</p>}
+          {slide.sub && <p className="text-base text-body">{slide.sub}</p>}
         </div>
 
-        <div className="step-dots" style={{ marginBottom: 28 }}>
+        <div className="step-dots mb-7">
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
             <div key={i} className={`step-dot${i === idx ? ' active' : ''}`} />
           ))}
         </div>
 
-        <button className="btn-main" onClick={() => setIdx(idx + 1)}>
+        <button type="button" className="btn-main" onClick={() => setIdx(idx + 1)}>
           다음 →
         </button>
       </div>
     )
   }
 
-  // Milestone creation slide
   return (
-    <div className="screen" style={{ padding: '64px 24px 48px', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <p style={{ fontSize: 22, fontWeight: 300, color: 'var(--text-primary)', marginBottom: 8, lineHeight: 1.5, letterSpacing: '-0.3px' }}>
+    <div className="screen flex flex-col px-6 pb-12 pt-16">
+      <div className="flex flex-1 flex-col">
+        <p className="mb-2 text-[22px] font-light leading-relaxed tracking-tight text-ink">
           어떤 것들을 시작해보고 싶나요?
         </p>
-        <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 32 }}>
-          나만의 마일스톤을 만들어봐요. 최대 5개.
-        </p>
+        <p className="mb-8 text-sm text-body">나만의 마일스톤을 만들어봐요. 최대 5개.</p>
 
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+        <div className="mb-5 flex gap-2.5">
           <input
+            className="input-inline"
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="예: 논문, 운동, 사이드 프로젝트..."
             maxLength={16}
             autoFocus
-            style={{
-              flex: 1,
-              background: '#ffffff',
-              border: '1px solid #d6d3d1',
-              borderRadius: 8,
-              padding: '13px 16px',
-              color: 'var(--text-primary)',
-              fontSize: 15,
-              fontFamily: 'inherit',
-              outline: 'none',
-              transition: 'border-color 0.15s',
-            }}
-            onFocus={e => e.target.style.borderColor = '#292524'}
-            onBlur={e => e.target.style.borderColor = '#d6d3d1'}
           />
           <button
+            type="button"
+            className="btn-add"
             onClick={addMilestone}
-            disabled={!input.trim() || milestones.length >= 5}
-            style={{
-              background: input.trim() && milestones.length < 5 ? '#292524' : '#f0efed',
-              border: 'none',
-              borderRadius: 9999,
-              color: input.trim() && milestones.length < 5 ? '#ffffff' : '#a8a29e',
-              fontFamily: 'inherit',
-              fontSize: 20,
-              width: 48,
-              cursor: input.trim() && milestones.length < 5 ? 'pointer' : 'default',
-              transition: 'all 0.15s',
-              flexShrink: 0,
-            }}
+            disabled={!canAdd}
           >
             +
           </button>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+        <div className="flex flex-1 flex-col gap-2.5">
           {milestones.map(m => (
-            <div
-              key={m.id}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: '#ffffff',
-                border: '1px solid #e7e5e4',
-                borderRadius: 16, padding: '13px 16px',
-                animation: 'fadeIn 0.3s ease both',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-              }}
-            >
+            <div key={m.id} className="milestone-row">
               <GradientDot colorKey={m.colorKey} size={16} />
-              <span style={{ flex: 1, fontSize: 15, color: 'var(--text-primary)', fontWeight: 500 }}>{m.name}</span>
+              <span className="flex-1 text-[15px] font-medium text-ink">{m.name}</span>
               <button
+                type="button"
                 onClick={() => removeMilestone(m.id)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-dim)', fontSize: 18, lineHeight: 1, padding: '0 2px' }}
-              >×</button>
+                className="border-0 bg-transparent px-0.5 text-lg leading-none text-dim cursor-pointer"
+              >
+                ×
+              </button>
             </div>
           ))}
 
           {milestones.length === 0 && (
-            <p style={{ fontSize: 13, color: 'var(--text-dim)', textAlign: 'center', marginTop: 16 }}>
-              아직 마일스톤이 없어요.
-            </p>
+            <p className="mt-4 text-center text-[13px] text-dim">아직 마일스톤이 없어요.</p>
           )}
         </div>
       </div>
 
-      <div className="step-dots" style={{ marginBottom: 20 }}>
+      <div className="step-dots mb-5">
         {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
           <div key={i} className={`step-dot${i === idx ? ' active' : ''}`} />
         ))}
       </div>
 
       <button
+        type="button"
         className="btn-main"
         onClick={() => milestones.length > 0 && onDone(milestones)}
         disabled={milestones.length === 0}
       >
         시작하기
       </button>
-      <button className="btn-ghost" style={{ marginTop: 10 }} onClick={() => onDone([])}>
+      <button type="button" className="btn-ghost mt-2.5" onClick={() => onDone([])}>
         나중에 설정할게요
       </button>
     </div>

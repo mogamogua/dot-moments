@@ -7,7 +7,7 @@ export default function MilestoneSetup({ onSave, onClose, initialMilestones = []
   const [input, setInput] = useState('')
 
   const existing = loadData().milestones
-  const colorOffset = existing.length // new milestones continue from existing color index
+  const colorOffset = existing.length
 
   const addMilestone = () => {
     const name = input.trim()
@@ -30,92 +30,60 @@ export default function MilestoneSetup({ onSave, onClose, initialMilestones = []
 
   const handleKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); addMilestone() } }
 
+  const canAdd = input.trim() && milestones.length < 5
+
   return (
-    <div style={{
-      position: 'absolute', inset: 0, background: 'var(--bg)',
-      display: 'flex', flexDirection: 'column',
-      padding: '56px 24px 40px', zIndex: 200,
-      animation: 'fadeIn 0.25s ease both',
-    }}>
+    <div className="absolute inset-0 z-[200] flex animate-[fadeIn_0.25s_ease_both] flex-col bg-bg px-6 pb-10 pt-14">
       {onClose && (
-        <button onClick={onClose} style={{ position: 'absolute', top: 20, right: 24, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 24 }}>×</button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-6 top-5 border-0 bg-transparent text-2xl text-body cursor-pointer"
+        >
+          ×
+        </button>
       )}
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <p style={{ fontSize: 24, fontWeight: 300, color: 'var(--text-primary)', marginBottom: 8, lineHeight: 1.4, letterSpacing: '-0.3px' }}>
+      <div className="flex flex-1 flex-col">
+        <p className="mb-2 text-2xl font-light leading-snug tracking-tight text-ink">
           내 목표를 설정해봐요.
         </p>
-        <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 32 }}>
-          마일스톤을 추가하면 점과 함께 기록돼요.
-        </p>
+        <p className="mb-8 text-sm text-body">마일스톤을 추가하면 점과 함께 기록돼요.</p>
 
-        {/* Input */}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+        <div className="mb-5 flex gap-2.5">
           <input
+            className="input-inline"
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="예: 논문, 운동, 사이드 프로젝트..."
             maxLength={16}
             autoFocus
-            style={{
-              flex: 1,
-              background: '#ffffff',
-              border: '1px solid #d6d3d1',
-              borderRadius: 8,
-              padding: '13px 16px',
-              color: 'var(--text-primary)',
-              fontSize: 15,
-              fontFamily: 'inherit',
-              outline: 'none',
-              transition: 'border-color 0.15s',
-            }}
-            onFocus={e => e.target.style.borderColor = '#292524'}
-            onBlur={e => e.target.style.borderColor = '#d6d3d1'}
           />
-          <button
-            onClick={addMilestone}
-            disabled={!input.trim() || milestones.length >= 5}
-            style={{
-              background: input.trim() && milestones.length < 5 ? '#292524' : '#f0efed',
-              border: 'none', borderRadius: 9999,
-              color: input.trim() && milestones.length < 5 ? '#ffffff' : '#a8a29e',
-              fontFamily: 'inherit', fontSize: 20, width: 48,
-              cursor: input.trim() && milestones.length < 5 ? 'pointer' : 'default',
-              transition: 'all 0.15s', flexShrink: 0,
-            }}
-          >+</button>
+          <button type="button" className="btn-add" onClick={addMilestone} disabled={!canAdd}>+</button>
         </div>
 
-        {/* List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+        <div className="flex flex-1 flex-col gap-2.5">
           {milestones.length === 0 && (
-            <p style={{ fontSize: 13, color: 'var(--text-dim)', textAlign: 'center', marginTop: 20 }}>
-              마일스톤을 추가해봐요.
-            </p>
+            <p className="mt-5 text-center text-[13px] text-dim">마일스톤을 추가해봐요.</p>
           )}
           {milestones.map(m => (
-            <div key={m.id} style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              background: '#ffffff',
-              border: '1px solid #e7e5e4',
-              borderRadius: 16, padding: '13px 16px',
-              animation: 'fadeIn 0.25s ease both',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-            }}>
+            <div key={m.id} className="milestone-row">
               <GradientDot colorKey={m.colorKey} size={16} />
-              <span style={{ flex: 1, fontSize: 15, color: 'var(--text-primary)', fontWeight: 500 }}>{m.name}</span>
-              <button onClick={() => removeMilestone(m.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-dim)', fontSize: 18, lineHeight: 1, padding: '0 2px' }}>×</button>
+              <span className="flex-1 text-[15px] font-medium text-ink">{m.name}</span>
+              <button
+                type="button"
+                onClick={() => removeMilestone(m.id)}
+                className="border-0 bg-transparent px-0.5 text-lg leading-none text-dim cursor-pointer"
+              >
+                ×
+              </button>
             </div>
           ))}
         </div>
       </div>
 
-      <button
-        className="btn-main"
-        onClick={handleSave}
-        disabled={milestones.length === 0}
-      >
+      <button type="button" className="btn-main" onClick={handleSave} disabled={milestones.length === 0}>
         저장하기
       </button>
     </div>

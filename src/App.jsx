@@ -3,15 +3,16 @@ import { loadData, saveData } from './store'
 import Onboarding from './screens/Onboarding'
 import Home from './screens/Home'
 import MyDots from './screens/MyDots'
-import ModeA from './screens/ModeA'
-import ModeB from './screens/ModeB'
+import QuickStartFlow from './screens/quickStart/QuickStartFlow'
+import StepByStepFlow from './screens/stepByStep/StepByStepFlow'
+import { cn } from './lib/cn'
 
 const VIEWS = { HOME: 0, MY_DOTS: 1 }
 
 export default function App() {
   const [data, setData] = useState(() => loadData())
   const [view, setView] = useState(VIEWS.HOME)
-  const [modal, setModal] = useState(null) // 'modeA' | 'modeB'
+  const [modal, setModal] = useState(null) // 'quickStart' | 'stepByStep'
   const [slideX, setSlideX] = useState(0)
 
   const markOnboarded = (milestones) => {
@@ -25,7 +26,6 @@ export default function App() {
     setView(v)
   }
 
-
   if (!data.onboardingDone) {
     return (
       <div className="phone-frame">
@@ -35,59 +35,48 @@ export default function App() {
   }
 
   return (
-    <div className="phone-frame" style={{ overflow: 'hidden' }}>
-      {/* Sliding panel container */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        display: 'flex',
-        transform: `translateX(${slideX}px)`,
-        transition: 'transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1)',
-        width: '200%',
-      }}>
-        {/* Home panel */}
-        <div style={{ width: '50%', height: '100%', position: 'relative', flexShrink: 0 }}>
+    <div className="phone-frame overflow-hidden">
+      <div
+        className="absolute inset-0 flex w-[200%] transition-transform duration-[350ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+        style={{ transform: `translateX(${slideX}px)` }}
+      >
+        <div className="relative h-full w-1/2 shrink-0">
           <Home
-            onModeA={() => setModal('modeA')}
-            onModeB={() => setModal('modeB')}
+            onQuickStart={() => setModal('quickStart')}
+            onStepByStep={() => setModal('stepByStep')}
             onSwipeLeft={() => switchTo(VIEWS.MY_DOTS)}
           />
         </div>
 
-        {/* MyDots panel */}
-        <div style={{ width: '50%', height: '100%', position: 'relative', flexShrink: 0 }}>
+        <div className="relative h-full w-1/2 shrink-0">
           <MyDots onSwipeRight={() => switchTo(VIEWS.HOME)} />
         </div>
       </div>
 
-      {/* Bottom nav dots */}
-      <div style={{
-        position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', gap: 6, zIndex: 10,
-      }}>
+      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
         {[VIEWS.HOME, VIEWS.MY_DOTS].map(v => (
           <div
             key={v}
+            role="button"
+            tabIndex={0}
             onClick={() => switchTo(v)}
-            style={{
-              width: v === view ? 18 : 6, height: 6,
-              borderRadius: 3,
-              background: v === view ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.15)',
-              transition: 'all 0.3s',
-              cursor: v === view ? 'default' : 'pointer',
-            }}
+            onKeyDown={e => e.key === 'Enter' && switchTo(v)}
+            className={cn(
+              'h-1.5 rounded-sm transition-all',
+              v === view ? 'w-[18px] cursor-default bg-black/55' : 'w-1.5 cursor-pointer bg-black/15',
+            )}
           />
         ))}
       </div>
 
-      {/* Modals */}
-      {modal === 'modeA' && (
-        <ModeA
+      {modal === 'quickStart' && (
+        <QuickStartFlow
           onClose={() => setModal(null)}
           onDone={() => { setModal(null); setData(loadData()) }}
         />
       )}
-      {modal === 'modeB' && (
-        <ModeB
+      {modal === 'stepByStep' && (
+        <StepByStepFlow
           onClose={() => setModal(null)}
           onDone={() => { setModal(null); setData(loadData()) }}
         />

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import GradientDot from '../components/GradientDot'
 import { loadData, getMilestoneById } from '../store'
-
 function groupByDate(dots) {
   const groups = {}
   ;[...dots].reverse().forEach(dot => {
@@ -38,35 +37,39 @@ export default function MyDots({ onSwipeRight }) {
 
   return (
     <div
-      className="screen"
-      style={{ padding: '56px 24px 0' }}
+      className="screen px-6 pt-14"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={() => setTooltip(null)}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+      <div className="mb-7 flex items-center gap-3">
         <button
+          type="button"
           onClick={onSwipeRight}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 20, padding: '0 4px 0 0', lineHeight: 1, display: 'flex', alignItems: 'center' }}
+          className="flex items-center border-0 bg-transparent pl-0 pr-1 text-xl leading-none text-body cursor-pointer"
           aria-label="홈으로 돌아가기"
-        >←</button>
-        <p style={{ fontSize: 22, fontWeight: 300, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>나의 점들</p>
+        >
+          ←
+        </button>
+        <p className="text-[22px] font-light tracking-tight text-ink">나의 점들</p>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
+      <div className="flex-1 overflow-y-auto pb-[120px]">
         {groups.length === 0 ? (
-          <div style={{ textAlign: 'center', marginTop: 80 }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 15 }}>
+          <div className="mt-20 text-center">
+            <p className="text-[15px] text-body">
               아직 기록이 없어요.<br />홈에서 첫 점을 찍어봐요.
             </p>
           </div>
         ) : (
           groups.map((group, gi) => (
-            <div key={gi} style={{ marginBottom: 28, animation: `fadeIn 0.4s ${gi * 0.06}s ease both` }}>
-              <p style={{ fontSize: 12, color: 'var(--text-dim)', marginBottom: 12, fontWeight: 500 }}>
-                {group.label}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, paddingLeft: 4 }}>
+            <div
+              key={gi}
+              className="mb-7 animate-[fadeIn_0.4s_ease_both]"
+              style={{ animationDelay: `${gi * 0.06}s` }}
+            >
+              <p className="mb-3 text-xs font-medium text-dim">{group.label}</p>
+              <div className="flex flex-wrap gap-3.5 pl-1">
                 {group.dots.map(dot => {
                   const age = (now - new Date(dot.date)) / (1000 * 60 * 60 * 24 * 30)
                   const opacity = Math.max(0.55, 1 - age * 0.2)
@@ -75,10 +78,14 @@ export default function MyDots({ onSwipeRight }) {
                   const isSelected = tooltip?.id === dot.id
 
                   return (
-                    <div key={dot.id} style={{ position: 'relative' }}>
+                    <div key={dot.id} className="relative">
                       <div
+                        role="button"
+                        tabIndex={0}
                         onClick={e => { e.stopPropagation(); setTooltip(isSelected ? null : dot) }}
-                        style={{ marginTop: jitter, cursor: 'pointer' }}
+                        onKeyDown={e => e.key === 'Enter' && (e.stopPropagation(), setTooltip(isSelected ? null : dot))}
+                        className="cursor-pointer"
+                        style={{ marginTop: jitter }}
                       >
                         <GradientDot
                           colorKey={ms.colorKey}
@@ -89,23 +96,11 @@ export default function MyDots({ onSwipeRight }) {
                       </div>
 
                       {isSelected && (
-                        <div style={{
-                          position: 'absolute', bottom: 30, left: '50%',
-                          transform: 'translateX(-50%)',
-                          background: '#ffffff',
-                          border: '1px solid #e7e5e4',
-                          borderRadius: 12, padding: '8px 12px',
-                          whiteSpace: 'nowrap', zIndex: 10,
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
-                          animation: 'fadeIn 0.2s ease both',
-                          minWidth: 140,
-                        }}>
-                          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>
-                            {dot.label || '기록'}
-                          </p>
-                          <p style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{ms.name}</p>
+                        <div className="absolute bottom-[30px] left-1/2 z-10 min-w-[140px] -translate-x-1/2 animate-[fadeIn_0.2s_ease_both] whitespace-nowrap rounded-card border border-border bg-card px-3 py-2 shadow-[0_4px_20px_rgba(0,0,0,0.10)]">
+                          <p className="mb-0.5 text-xs font-semibold text-ink">{dot.label || '기록'}</p>
+                          <p className="text-[11px] text-body">{ms.name}</p>
                           {dot.note && (
-                            <p style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>{dot.note}</p>
+                            <p className="mt-1 text-[11px] text-dim">{dot.note}</p>
                           )}
                         </div>
                       )}
@@ -118,17 +113,12 @@ export default function MyDots({ onSwipeRight }) {
         )}
       </div>
 
-      {/* Legend — 사용자 마일스톤 */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        background: 'linear-gradient(to top, var(--bg) 70%, transparent)',
-        padding: '32px 24px 28px',
-      }}>
-        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-bg from-70% to-transparent px-6 pb-7 pt-8">
+        <div className="flex flex-wrap gap-3.5">
           {data.milestones.map(m => (
-            <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div key={m.id} className="flex items-center gap-1.5">
               <GradientDot colorKey={m.colorKey} size={10} />
-              <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{m.name}</span>
+              <span className="text-xs text-body">{m.name}</span>
             </div>
           ))}
         </div>
