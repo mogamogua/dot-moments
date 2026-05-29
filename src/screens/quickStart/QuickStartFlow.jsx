@@ -24,8 +24,15 @@ export default function QuickStartFlow({ onClose, onDone }) {
     )
   }
 
+  const totalSteps = flow.selectedTemplate?.id === 'timer' ? 4 : 3
+
   return (
-    <ModeShell step={flow.step} onClose={onClose}>
+    <ModeShell
+      step={flow.step}
+      totalSteps={totalSteps}
+      onClose={onClose}
+      onBack={flow.step > 1 && flow.step < 4 ? flow.goBack : undefined}
+    >
       {flow.step === 1 && (
         <BlockerStep
           blockerText={flow.blockerText}

@@ -19,6 +19,8 @@ export default function ActionPlanStep({
 }) {
   if (!template) return null
 
+  const showTimer = template.id === 'timer'
+
   return (
     <div className={stepShell}>
       <div className={scrollBody}>
@@ -42,26 +44,29 @@ export default function ActionPlanStep({
           </div>
         </div>
 
-        <p className="mb-2.5 text-[13px] font-medium text-dim">타이머</p>
-        <div className="mb-6 flex gap-2.5">
-          {TIMER_OPTIONS.map(opt => (
-            <button
-              key={opt.label}
-              type="button"
-              onClick={() => onTimerChange(opt.value)}
-              className={timerOption(timerMinutes === opt.value)}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
-        <TimerDisplay seconds={timerMinutes * 60} size="md" />
+        {showTimer && (
+          <>
+            <p className="mb-2.5 text-[13px] font-medium text-dim">타이머</p>
+            <div className="mb-6 flex gap-2.5">
+              {TIMER_OPTIONS.map(opt => (
+                <button
+                  key={opt.label}
+                  type="button"
+                  onClick={() => onTimerChange(opt.value)}
+                  className={timerOption(timerMinutes === opt.value)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <TimerDisplay seconds={timerMinutes * 60} size="md" />
+          </>
+        )}
       </div>
 
       <div className={stepFooter}>
         <button type="button" className="btn-main" onClick={onStart} disabled={!minAction.trim()}>
-          시작
+          {showTimer ? '타이머 시작' : '점 찍기 💧'}
         </button>
         <button type="button" className="btn-ghost" onClick={onRestDay}>오늘은 그냥 쉴게요</button>
       </div>

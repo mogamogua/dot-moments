@@ -17,6 +17,8 @@ export default function useStepByStepFlow(onDone) {
 
   const refreshMilestones = () => setMilestones(loadData().milestones)
 
+  const goBack = () => setStep(s => Math.max(1, s - 1))
+
   const goToTemplateStep = () => setStep(2)
 
   const goToActionPlanStep = () => {
@@ -27,12 +29,15 @@ export default function useStepByStepFlow(onDone) {
     setStep(3)
   }
 
-  const startCountdown = () => setStep(4)
-
   const recordDot = () => {
     addDot({ milestoneId: selectedMilestone?.id, label: minAction })
     window.dispatchEvent(new Event('dots-updated'))
     setRevealed(true)
+  }
+
+  const startCountdown = () => {
+    if (selectedTemplate?.id === 'timer') setStep(4)
+    else recordDot()
   }
 
   return {
@@ -53,6 +58,7 @@ export default function useStepByStepFlow(onDone) {
     timerMinutes,
     setTimerMinutes,
     revealed,
+    goBack,
     goToTemplateStep,
     goToActionPlanStep,
     startCountdown,
