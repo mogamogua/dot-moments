@@ -91,6 +91,7 @@ export default function useStepByStepFlow(onDone) {
     setEncouragement,
     photo,
     setPhoto,
+    revealed,
     completionStepNum,
     goBack,
     goToTemplateStep,

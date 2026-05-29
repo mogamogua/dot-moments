@@ -91,6 +91,7 @@ export default function useQuickStartFlow(onDone) {
     setEncouragement,
     photo,
     setPhoto,
+    revealed,
     completionStepNum,
     goBack,
     goToTemplateStep,
