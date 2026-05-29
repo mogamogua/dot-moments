@@ -1,0 +1,14 @@
+{
+  "name": "dot moments",
+  "short_name": "dot moments",
+  "description": "시작할 때마다 점 하나가 찍혀요.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#e8e8e5",
+  "theme_color": "#e8e8e5",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
