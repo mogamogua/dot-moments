@@ -10,6 +10,7 @@ export default function useQuickStartFlow(onDone) {
   const [selectedMilestone, setSelectedMilestone] = useState(null)
   const [selectedTemplateId, setSelectedTemplateId] = useState(null)
   const [minAction, setMinAction] = useState('')
+  const [timerEnabled, setTimerEnabled] = useState(false)
   const [timerMinutes, setTimerMinutes] = useState(10)
   const [revealed, setRevealed] = useState(false)
 
@@ -25,6 +26,7 @@ export default function useQuickStartFlow(onDone) {
     const template = START_TEMPLATES.find(t => t.id === selectedTemplateId)
     if (!template) return
     setMinAction(buildMinAction(template, blockerText, selectedMilestone?.name))
+    setTimerEnabled(template.id === 'timer')
     setTimerMinutes(template.defaultTimer ?? 10)
     setStep(3)
   }
@@ -36,7 +38,7 @@ export default function useQuickStartFlow(onDone) {
   }
 
   const startCountdown = () => {
-    if (selectedTemplate?.id === 'timer') setStep(4)
+    if (timerEnabled) setStep(4)
     else recordDot()
   }
 
@@ -55,6 +57,8 @@ export default function useQuickStartFlow(onDone) {
     selectedTemplate,
     minAction,
     setMinAction,
+    timerEnabled,
+    setTimerEnabled,
     timerMinutes,
     setTimerMinutes,
     revealed,

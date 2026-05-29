@@ -24,7 +24,7 @@ export default function QuickStartFlow({ onClose, onDone }) {
     )
   }
 
-  const totalSteps = flow.selectedTemplate?.id === 'timer' ? 4 : 3
+  const totalSteps = flow.timerEnabled ? 4 : 3
 
   return (
     <ModeShell
@@ -60,6 +60,8 @@ export default function QuickStartFlow({ onClose, onDone }) {
           template={flow.selectedTemplate}
           minAction={flow.minAction}
           onMinActionChange={flow.setMinAction}
+          timerEnabled={flow.timerEnabled}
+          onTimerToggle={() => flow.setTimerEnabled(e => !e)}
           timerMinutes={flow.timerMinutes}
           onTimerChange={flow.setTimerMinutes}
           onStart={flow.startCountdown}

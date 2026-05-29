@@ -29,6 +29,13 @@ export function radioIndicator(active) {
   )
 }
 
+export function checkIndicator(active) {
+  return cn(
+    'flex size-[18px] shrink-0 items-center justify-center rounded border-2 transition-all',
+    active ? 'border-accent bg-accent' : 'border-border-strong bg-transparent',
+  )
+}
+
 export function timerOption(active) {
   return cn(
     'flex-1 cursor-pointer rounded-[14px] border py-3.5 text-[15px] font-semibold transition-all',

@@ -100,7 +100,7 @@
 
 **Step 4 - Done**:
 - "하고 있는 중이에요." (You're doing it.)
-- "점 찍기 💧" (Place a dot 💧)
+- "점 찍기" (Place a dot)
 
 **Alternative**:
 - "오늘은 그냥 쉴게요." (I'll just rest today.)
