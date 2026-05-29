@@ -38,22 +38,8 @@ export default function Home({ onModeA, onModeB, onSwipeLeft }) {
       onTouchEnd={handleTouchEnd}
     >
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div>
         <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{today}</span>
-        <button
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}
-          onClick={() => {
-            if (confirm('모든 데이터가 삭제되고 온보딩부터 다시 시작해요. 계속할까요?')) {
-              localStorage.clear(); window.location.reload()
-            }
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="5" r="1.5" fill="#666"/>
-            <circle cx="10" cy="10" r="1.5" fill="#666"/>
-            <circle cx="10" cy="15" r="1.5" fill="#666"/>
-          </svg>
-        </button>
       </div>
 
       {/* Check-in */}

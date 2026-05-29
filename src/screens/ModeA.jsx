@@ -92,8 +92,6 @@ export default function ModeA({ onClose, onDone }) {
   }
 
   const restDay = () => {
-    addDot({ milestoneId: selectedMilestone?.id || milestones[0]?.id, label: '쉬기로 했어요' })
-    window.dispatchEvent(new Event('dots-updated'))
     onDone()
   }
 
